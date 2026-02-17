@@ -2,7 +2,7 @@
 RISCV_ISA = im
 
 USE_MYSTDLIB = 1
-TOOLCHAIN_PREFIX = /opt/riscv32$(RISCV_ISA)/bin/riscv32-unknown-elf-
+TOOLCHAIN_PREFIX = /opt/riscv/bin/riscv-none-elf-
 
 CFLAGS = -MD -O3 -mabi=ilp32 -march=rv32$(RISCV_ISA) -DTIME -DRISCV
 OBJS = dhry_1.o dhry_2.o stdlib.o dhry_main.o

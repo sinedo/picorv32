@@ -106,15 +106,13 @@ int             Int_2_Par_Val;
 } /* Proc_8 */
 
 
-Enumeration Func_1 (Ch_1_Par_Val, Ch_2_Par_Val)
+Enumeration Func_1 (Capital_Letter Ch_1_Par_Val, Capital_Letter Ch_2_Par_Val)
 /*************************************************/
     /* executed three times                                         */
     /* first call:      Ch_1_Par_Val == 'H', Ch_2_Par_Val == 'R'    */
     /* second call:     Ch_1_Par_Val == 'A', Ch_2_Par_Val == 'C'    */
     /* third call:      Ch_1_Par_Val == 'B', Ch_2_Par_Val == 'C'    */
 
-Capital_Letter   Ch_1_Par_Val;
-Capital_Letter   Ch_2_Par_Val;
 {
   Capital_Letter        Ch_1_Loc;
   Capital_Letter        Ch_2_Loc;
