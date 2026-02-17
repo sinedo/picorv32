@@ -48,7 +48,7 @@ module testbench;
 	);
 
 	reg [7:0] memory [0:256*1024-1];
-	initial $readmemh("dhry.hex", memory);
+	initial $readmemh("build/dhry.hex", memory);
 
 	always @(posedge clk) begin
 		mem_ready <= 1'b0;
@@ -87,7 +87,7 @@ module testbench;
 	end
 
 	initial begin
-		$dumpfile("testbench.vcd");
+		$dumpfile("build/testbench.vcd");
 		$dumpvars(0, testbench);
 	end
 

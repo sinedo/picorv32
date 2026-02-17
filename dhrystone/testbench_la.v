@@ -57,7 +57,7 @@ module testbench;
 	);
 
 	reg [7:0] memory [0:256*1024-1];
-	initial $readmemh("dhry.hex", memory);
+	initial $readmemh("build/dhry.hex", memory);
 
 	assign mem_ready = 1;
 
@@ -85,7 +85,7 @@ module testbench;
 	end
 
 	initial begin
-		$dumpfile("testbench_la.vcd");
+		$dumpfile("build/testbench_la.vcd");
 		$dumpvars(0, testbench);
 	end
 
@@ -93,7 +93,7 @@ module testbench;
 
 	initial begin
 		if ($test$plusargs("trace")) begin
-			trace_file = $fopen("testbench.trace", "w");
+			trace_file = $fopen("build/testbench.trace", "w");
 			repeat (10) @(posedge clk);
 			while (!trap) begin
 				@(posedge clk);

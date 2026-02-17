@@ -34,5 +34,6 @@
 /check.vcd
 /synth.log
 /synth.v
+build/
 .*.swp
 *.toml
