@@ -1,5 +1,4 @@
-TOOLCHAIN_PREFIX = /opt/riscv32imc/bin/riscv32-unknown-elf-
-
+TOOLCHAIN_PREFIX = /opt/riscv/bin/riscv-none-elf-
 ICE40_SIM_CELLS=$(shell yosys-config --datdir/ice40/cells_sim.v)
 
 # set to 4 for simulation
@@ -13,7 +12,7 @@ all: example.bin
 firmware.elf: firmware.S firmware.c firmware.lds
 	$(TOOLCHAIN_PREFIX)gcc \
 		-DSHIFT_COUNTER_BITS=$(FIRMWARE_COUNTER_BITS) \
-		-march=rv32i -Os -ffreestanding -nostdlib \
+		-march=rv32imc -Os -ffreestanding -nostdlib \
 		-o $@ firmware.S firmware.c \
 		--std=gnu99 -Wl,-Bstatic,-T,firmware.lds,-Map,firmware.map,--strip-debug
 	chmod -x $@
