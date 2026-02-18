@@ -1,8 +1,8 @@
 # Select your RISC-V compiler here (riscv32i/riscv32im/riscv32ic/riscv32imc)
 RISCV_ISA = i
 
-CROSS=/opt/riscv32$(RISCV_ISA)/bin/riscv32-unknown-elf-
-CFLAGS= -O3
+CROSS = /opt/riscv/bin/riscv-none-elf-
+CFLAGS= -O3 -march=rv32$(RISCV_ISA)
 
 DHRY_SRCS = dhrystone/dhry.h dhrystone/stdlib.c dhrystone/dhry_2.c dhrystone/dhry_1.c
 BRAM_SIZE = 3072
