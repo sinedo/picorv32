@@ -1,8 +1,8 @@
 # Select your RISC-V compiler here (riscv32i/riscv32im/riscv32ic/riscv32imc)
-RISCV_ISA = im
+RISCV_ISA = i
 
 USE_MYSTDLIB = 1
-TOOLCHAIN_PREFIX = /opt/riscv/bin/riscv-none-elf-
+TOOLCHAIN_PREFIX ?= riscv-none-elf-
 
 BUILD_DIR := build
 

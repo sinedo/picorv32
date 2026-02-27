@@ -25,7 +25,7 @@ module testbench #(
 
 	initial begin
 		if ($test$plusargs("vcd")) begin
-			$dumpfile("testbench.vcd");
+			$dumpfile("build/sim/testbench.vcd");
 			$dumpvars(0, testbench);
 		end
 		repeat (1000000) @(posedge clk);
@@ -39,7 +39,7 @@ module testbench #(
 
 	initial begin
 		if ($test$plusargs("trace")) begin
-			trace_file = $fopen("testbench.trace", "w");
+			trace_file = $fopen("build/sim/testbench.trace", "w");
 			repeat (10) @(posedge clk);
 			while (!trap) begin
 				@(posedge clk);
@@ -254,7 +254,7 @@ module picorv32_wrapper #(
 	reg [1023:0] firmware_file;
 	initial begin
 		if (!$value$plusargs("firmware=%s", firmware_file))
-			firmware_file = "firmware/firmware.hex";
+			firmware_file = "firmware/build/firmware.hex";
 		$readmemh(firmware_file, mem.memory);
 	end
 

@@ -16,7 +16,7 @@ module testbench;
 
 	initial begin
 		if ($test$plusargs("vcd")) begin
-			$dumpfile("testbench.vcd");
+			$dumpfile("build/sim/testbench_ez.vcd");
 			$dumpvars(0, testbench);
 		end
 		repeat (100) @(posedge clk);
