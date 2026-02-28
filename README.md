@@ -6,12 +6,8 @@ PicoRV32 is a CPU core that implements the [RISC-V RV32IMC Instruction Set](http
 It can be configured as RV32E, RV32I, RV32IC, RV32IM, or RV32IMC core, and optionally
 contains a built-in interrupt controller.
 
-Tools (gcc, binutils, etc..) can be obtained via the [RISC-V Website](https://riscv.org/software-status/).
-The examples bundled with PicoRV32 expect various RV32 toolchains to be installed in `/opt/riscv32i[m][c]`. See
-the [build instructions below](#building-a-pure-rv32i-toolchain) for details.
-Many Linux distributions now include the tools for RISC-V (for example
-Ubuntu 20.04 has `gcc-riscv64-unknown-elf`). To compile using those set
-`TOOLCHAIN_PREFIX` accordingly (eg. `make TOOLCHAIN_PREFIX=riscv64-unknown-elf-`).
+The recommended toolchain is the [xPack GNU RISCV-V Embedded GCC](https://github.com/xpack-dev-tools/riscv-none-elf-gcc-xpack), which is a standalone
+cross-platform binary distribution of GNU RISC-V Embedded GCC. Download and usage is described in section [Downloading xPack GNU RISC-V Embedded GCC](#downloading-xpack-gnu-risc-v-embedded-gcc). This toolchain is recommended, because this fork of the PicoRV32 was modified with this toolchain in mind. For alternatives (e.g. the official toolchain), the toolchain prefix and compiler flags in the make files need to be changed accordingly.
 
 PicoRV32 is free and open hardware licensed under the [ISC license](http://en.wikipedia.org/wiki/ISC_license)
 (a license that is similar in terms to the MIT license or the 2-clause BSD license).
@@ -25,7 +21,7 @@ PicoRV32 is free and open hardware licensed under the [ISC license](http://en.wi
 - [PicoRV32 Native Memory Interface](#picorv32-native-memory-interface)
 - [Pico Co-Processor Interface (PCPI)](#pico-co-processor-interface-pcpi)
 - [Custom Instructions for IRQ Handling](#custom-instructions-for-irq-handling)
-- [Building a pure RV32I Toolchain](#building-a-pure-rv32i-toolchain)
+- [Downloading xPack GNU RISC-V Embedded GCC](#downloading-xpack-gnu-risc-v-embedded-gcc)
 - [Linking binaries with newlib for PicoRV32](#linking-binaries-with-newlib-for-picorv32)
 - [Evaluation: Timing and Utilization on Xilinx 7-Series FPGAs](#evaluation-timing-and-utilization-on-xilinx-7-series-fpgas)
 
@@ -608,63 +604,33 @@ Example:
     timer x1, x2
 
 
-Building a pure RV32I Toolchain
+Downloading xPack GNU RISC-V Embedded GCC
 -------------------------------
 
-TL;DR: Run the following commands to build the complete toolchain:
+The following commands will download the xPack GNU RISC-V Embedded GCC toolchain and libraries for a RV32[I,M,C] target, inside `/opt/riscv`:
 
-    make download-tools
-    make -j$(nproc) build-tools
+    sudo mkdir -p /opt/riscv
+    cd /opt/riscv
+    wget https://github.com/xpack-dev-tools/riscv-none-elf-gcc-xpack/releases/download/v15.2.0-1/xpack-riscv-none-elf-gcc-15.2.0-1-linux-x64.tar.gz
+    sudo tar -xzf xpack-riscv-none-elf-gcc-15.2.0-1-linux-x64.tar.gz -C /opt/riscv --strip-components=1
 
-The default settings in the [riscv-tools](https://github.com/riscv/riscv-tools) build
-scripts will build a compiler, assembler and linker that can target any RISC-V ISA,
-but the libraries are built for RV32G and RV64G targets. Follow the instructions
-below to build a complete toolchain (including libraries) that target a pure RV32I
-CPU.
+To download the toolchain for Windows/MacOS download the corresponding tools from [the xpack release page](https://github.com/xpack-dev-tools/riscv-none-elf-gcc-xpack/releases).
+Alternatively the source code can be downloaded from the release page and can be
+built from source.
 
-The following commands will build the RISC-V GNU toolchain and libraries for a
-pure RV32I target, and install it in `/opt/riscv32i`:
+The commands will all be named using the prefix `riscv-none-elf-`.
+The instruction set is choosen by the argument `-march=rv32x` where
+`x` can be one of the following options:
 
-    # Ubuntu packages needed:
-    sudo apt-get install autoconf automake autotools-dev curl libmpc-dev \
-            libmpfr-dev libgmp-dev gawk build-essential bison flex texinfo \
-	    gperf libtool patchutils bc zlib1g-dev git libexpat1-dev
+- I  -Basic integer instruction set.
+- IC - Basic integer instruction set, compressed.
+- IM - Basic integer instruction set, with additional multiplication and division instructions.
+- IMC - Basic integer instruction set, with additional multiplication and division instructions, compressed.
 
-    sudo mkdir /opt/riscv32i
-    sudo chown $USER /opt/riscv32i
+For more information about these instruction sets and further RISC-V instruction sets see:
 
-    git clone https://github.com/riscv/riscv-gnu-toolchain riscv-gnu-toolchain-rv32i
-    cd riscv-gnu-toolchain-rv32i
-    git checkout 411d134
-    git submodule update --init --recursive
-
-    mkdir build; cd build
-    ../configure --with-arch=rv32i --prefix=/opt/riscv32i
-    make -j$(nproc)
-
-The commands will all be named using the prefix `riscv32-unknown-elf-`, which
-makes it easy to install them side-by-side with the regular riscv-tools (those
-are using the name prefix `riscv64-unknown-elf-` by default).
-
-Alternatively you can simply use one of the following make targets from PicoRV32's
-Makefile to build a `RV32I[M][C]` toolchain. You still need to install all
-prerequisites, as described above. Then run any of the following commands in the
-PicoRV32 source directory:
-
-| Command                                  | Install Directory  | ISA       |
-|:---------------------------------------- |:------------------ |:--------  |
-| `make -j$(nproc) build-riscv32i-tools`   | `/opt/riscv32i/`   | `RV32I`   |
-| `make -j$(nproc) build-riscv32ic-tools`  | `/opt/riscv32ic/`  | `RV32IC`  |
-| `make -j$(nproc) build-riscv32im-tools`  | `/opt/riscv32im/`  | `RV32IM`  |
-| `make -j$(nproc) build-riscv32imc-tools` | `/opt/riscv32imc/` | `RV32IMC` |
-
-Or simply run `make -j$(nproc) build-tools` to build and install all four tool chains.
-
-By default calling any of those make targets will (re-)download the toolchain
-sources. Run `make download-tools` to download the sources to `/var/cache/distfiles/`
-once in advance.
-
-*Note: These instructions are for git rev 411d134 (2018-02-14) of riscv-gnu-toolchain.*
+- [RISC-V Instruction Set Manual - Unprivileged Architectures](https://docs.riscv.org/reference/isa/unpriv/unpriv-index.html)
+- [Interactive RISC-V Instruction Encoder/Decoder](https://luplab.gitlab.io/rvcodecjs/)
 
 
 Linking binaries with newlib for PicoRV32
