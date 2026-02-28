@@ -21,7 +21,7 @@
 #define REDUCED_SIZE 1
 
 #ifdef USE_MYSTDLIB
-extern char     *malloc ();
+extern char     *malloc(int size);
 #else
 #  include <stdlib.h>
 #  include <string.h>
@@ -42,7 +42,7 @@ int             Arr_2_Glob [30] [50];
 int             Arr_2_Glob [50] [50];
 #endif
 
-Enumeration     Func_1 ();
+Enumeration Func_1 (Capital_Letter Ch_1_Par_Val, Capital_Letter Ch_2_Par_Val);
   /* forward declaration necessary since Enumeration may not simply be int */
 
 #ifndef REG
@@ -64,9 +64,9 @@ extern  int     times ();
                 /* Measurements should last at least about 2 seconds */
 #endif
 #ifdef TIME
-extern long     time();
+extern long time(long *ignored);
 #ifdef RISCV
-extern long     insn();
+extern long insn(long *ignored);
 #endif
                 /* see library function "time"  */
 #define Too_Small_Time 2
@@ -122,7 +122,7 @@ void run_dhrystone ()
         /* Arr_2_Glob [8][7] would have an undefined value.             */
         /* Warning: With 16-Bit processors and Number_Of_Runs > 32000,  */
         /* overflow may occur for this array element.                   */
-  
+
   /*if (Reg)
   {
     //printf ("Program compiled with 'register' attribute\n");
@@ -140,7 +140,7 @@ void run_dhrystone ()
   }
 
   // printf ("\nExecution starts, %d runs through Dhrystone\n", Number_Of_Runs);
-  
+
   /***************/
   /* Start timer */
   /***************/
@@ -219,7 +219,7 @@ void run_dhrystone ()
 
   /*
   printf("Execution ends\n\n");
-  
+
   printf ("Final values of the variables used in the benchmark:\n");
   printf ("\n");
   printf ("Int_Glob:            %d\n", Int_Glob);

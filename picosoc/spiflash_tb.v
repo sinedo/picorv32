@@ -254,7 +254,7 @@ module testbench;
 	endtask
 
 	initial begin
-		$dumpfile("spiflash_tb.vcd");
+		$dumpfile("build/sim/spiflash_tb.vcd");
 		$dumpvars(0, testbench);
 		$display("");
 

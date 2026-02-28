@@ -261,7 +261,7 @@ module picosoc_mem #(
 	reg [31:0] mem [0:WORDS-1];
 
 	initial begin
-		$readmemh("icebreaker_fw_bram.hex", mem);
+		$readmemh("build/firmware/icebreaker_fw_bram.hex", mem);
 	end
 
 	always @(posedge clk) begin

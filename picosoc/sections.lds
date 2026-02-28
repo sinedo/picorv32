@@ -6,6 +6,12 @@
 #  error "Set -DICEBREAKER or -DHX8KDEMO when compiling firmware.c"
 #endif
 
+#ifdef EXECUTE_FROM_FLASH
+    #define TEXT_REGION FLASH
+#else
+    #define TEXT_REGION RAM
+#endif
+
 MEMORY
 {
     FLASH (rx)      : ORIGIN = 0x00100000, LENGTH = 0x400000 /* entire flash, 4 MiB */
@@ -26,7 +32,7 @@ SECTIONS {
         . = ALIGN(4);
         _etext = .;        /* define a global symbol at end of code */
         _sidata = _etext;  /* This is used by the startup in order to initialize the .data secion */
-    } >RAM
+    } >TEXT_REGION
 
 
     /* This is the initialized data section

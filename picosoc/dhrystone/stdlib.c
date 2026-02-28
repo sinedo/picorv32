@@ -12,7 +12,7 @@ extern long time();
 extern long insn();
 
 #ifdef USE_MYSTDLIB
-extern char *malloc();
+extern char *malloc(int size);
 extern int printf(const char *format, ...);
 
 extern void *memcpy(void *dest, const void *src, long n);

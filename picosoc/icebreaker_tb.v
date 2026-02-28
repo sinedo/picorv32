@@ -27,7 +27,7 @@ module testbench;
 	event ser_sample;
 
 	initial begin
-		$dumpfile("testbench.vcd");
+		$dumpfile("build/sim/testbench.vcd");
 		$dumpvars(0, testbench);
 
 		repeat (6) begin
@@ -66,7 +66,9 @@ module testbench;
 		// We limit the amount of memory in simulation
 		// in order to avoid reduce simulation time
 		// required for intialization of RAM
-		.MEM_WORDS(3072)
+		`ifndef POST_SYNTH_SIM
+			.MEM_WORDS(3072)
+		`endif
 	) uut (
 		.clk      (clk      ),
 		.led1     (led1     ),
