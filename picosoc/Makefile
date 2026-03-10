@@ -1,5 +1,5 @@
 # Select your RISC-V compiler here (riscv32i/riscv32im/riscv32ic/riscv32imc)
-RISCV_ISA = im
+RISCV_ISA = imc
 
 # Build directories:
 BUILD_DIR := build
@@ -14,9 +14,6 @@ CFLAGS= -O3 -march=rv32$(RISCV_ISA)
 
 DHRY_SRCS = dhrystone/dhry.h dhrystone/stdlib.c dhrystone/dhry_2.c dhrystone/dhry_1.c
 BRAM_SIZE = 3072
-
-# Decides if program is executed from bram or flash
-EXEC_MODE ?= bram
 
 # ---- Firmware analysis ----
 
@@ -45,8 +42,7 @@ prog_flash: $(BITSTREAM_BUILD_DIR)/icebreaker_flash.bin $(FIRMWARE_BUILD_DIR)/ic
 	iceprog -o 1M $(FIRMWARE_BUILD_DIR)/icebreaker_fw_flash.bin
 
 prog_bram: $(BITSTREAM_BUILD_DIR)/icebreaker_bram.bin $(FIRMWARE_BUILD_DIR)/icebreaker_fw_bram.hex $(FIRMWARE_BUILD_DIR)/icebreaker_fw_random.hex
-	icebram -v $(FIRMWARE_BUILD_DIR)/icebreaker_fw_random.hex $(FIRMWARE_BUILD_DIR)/icebreaker_fw_bram.hex < $(PNR_BUILD_DIR)/icebreaker.asc > $(BITSTREAM_BUILD_DIR)/icebreaker_bram.asc
-	iceprog $(BITSTREAM_BUILD_DIR)/icebreaker_bram.asc
+	iceprog $(BITSTREAM_BUILD_DIR)/icebreaker_bram.bin
 
 prog_fw: $(FIRMWARE_BUILD_DIR)/icebreaker_fw_flash.bin
 	iceprog -o 1M $(FIRMWARE_BUILD_DIR)/icebreaker_fw_flash.bin
@@ -125,11 +121,6 @@ $(BITSTREAM_BUILD_DIR)/icebreaker_flash.bin: $(PNR_BUILD_DIR)/icebreaker.asc | $
 $(BITSTREAM_BUILD_DIR)/icebreaker_bram.bin: $(PNR_BUILD_DIR)/icebreaker.asc | $(BITSTREAM_BUILD_DIR)
 	icetime -d up5k -c 12 -mtr $(BITSTREAM_BUILD_DIR)/icebreaker.rpt $<
 	icepack $< $@
-
-$(BITSTREAM_BUILD_DIR)/icebreaker_bram.asc: $(FIRMWARE_BUILD_DIR)/icebreaker_fw_bram.hex \
-	$(FIRMWARE_BUILD_DIR)/icebreaker_fw_random.hex $(PNR_BUILD_DIR)/icebreaker.asc | $(BITSTREAM_BUILD_DIR)
-	icebram -v $(FIRMWARE_BUILD_DIR)/icebreaker_fw_random.hex $(FIRMWARE_BUILD_DIR)/icebreaker_fw_bram.hex \
-	< $(PNR_BUILD_DIR)/icebreaker.asc > $@
 
 # ---- Simulation ----
 $(SIM_BUILD_DIR)/icebreaker_tb.vpp: icebreaker_tb.v icebreaker.v ice40up5k_spram.v spimemio.v simpleuart.v \

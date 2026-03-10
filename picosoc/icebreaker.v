@@ -113,12 +113,12 @@ module icebreaker (
 		.BARREL_SHIFTER(0),
 		.TWO_CYCLE_COMPARE(0),
 		.TWO_CYCLE_ALU(0),
-		.ENABLE_COMPRESSED(0),
-		.ENABLE_MUL(0),
+		.ENABLE_COMPRESSED(1),
+		.ENABLE_MUL(1),
 		.ENABLE_FAST_MUL(0),
-		.ENABLE_DIV(0),
+		.ENABLE_DIV(1),
 		.MEM_WORDS(MEM_WORDS),
-		.PROGADDR_RESET(32'h0000_0000)  // BRAM  
+		.PROGADDR_RESET(32'h0000_0000)  // BRAM
 	) soc (
 		.clk          (clk         ),
 		.resetn       (resetn      ),
