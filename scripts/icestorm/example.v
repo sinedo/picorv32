@@ -33,8 +33,8 @@ module top (
 		.BARREL_SHIFTER(0),
 		.TWO_CYCLE_COMPARE(0),
 		.TWO_CYCLE_ALU(0),
-		.COMPRESSED_ISA(0),
-		.ENABLE_MUL(0),
+		.COMPRESSED_ISA(1),
+		.ENABLE_MUL(1),
 		.ENABLE_FAST_MUL(0),
 		.ENABLE_DIV(0)
 	) cpu (
@@ -55,7 +55,7 @@ module top (
 	// 128 32bit words = 512 bytes memory
 	localparam MEM_SIZE = 128;
 	reg [31:0] memory [0:MEM_SIZE-1];
-	initial $readmemh("firmware.hex", memory);
+	initial $readmemh("build/firmware/firmware.hex", memory);
 
 	always @(posedge clk) begin
 		mem_ready <= 0;

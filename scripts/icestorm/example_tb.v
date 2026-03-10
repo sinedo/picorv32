@@ -19,7 +19,7 @@ module testbench;
 
 	initial begin
 		if ($test$plusargs("vcd")) begin
-			$dumpfile("example.vcd");
+			$dumpfile("build/sim/example.vcd");
 			$dumpvars(0, testbench);
 		end
 
